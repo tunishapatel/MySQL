@@ -16,10 +16,10 @@ JOIN job j ON emp.fk_job_id = j.id
 
 SELECT DISTINCT salary 
 FROM employee emp1 
-WHERE 2=
+WHERE 2 =
 (SELECT count(DISTINCT salary) 
 FROM employee emp2
-WHERE emp1.salary<=emp2.salary);
+WHERE emp1.salary <= emp2.salary);
 
 
 -- Select query to get  all job name and department name in single query
