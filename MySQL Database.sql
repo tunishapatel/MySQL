@@ -1,6 +1,6 @@
 -- Creating employee table query
 
-CREATE TABLE `employee`.`employee` (
+CREATE TABLE `employee` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -11,14 +11,14 @@ CREATE TABLE `employee`.`employee` (
 
 -- Creating hobby table query
 
-CREATE TABLE `employee`.`hobby` (
+CREATE TABLE `hobby` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
 -- Creating employee_hobby table query
 
-CREATE TABLE `employee`.`employee_hobby` (
+CREATE TABLE `employee_hobby` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fk_employee_id` INT NOT NULL,
   `fk_hobby_id` INT NOT NULL,
@@ -26,18 +26,18 @@ CREATE TABLE `employee`.`employee_hobby` (
   INDEX `fk_employee_id_idx` (`fk_employee_id` ASC) VISIBLE,
   CONSTRAINT `fk_employee_id`
     FOREIGN KEY (`fk_employee_id`)
-    REFERENCES `employee`.`employee` (`id`)
+    REFERENCES `employee` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_hobby_id`
     FOREIGN KEY (`fk_hobby_id`)
-    REFERENCES `employee`.`hobby` (`id`)
+    REFERENCES `hobby` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
 -- Creating employee_salary table query
 
-CREATE TABLE `employee`.`employee_salary` (
+CREATE TABLE `employee_salary` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fk_employeeID` INT NOT NULL,
   `salary` VARCHAR(45) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `employee`.`employee_salary` (
   INDEX `fk_employeeID_idx` (`fk_employeeID` ASC) VISIBLE,
   CONSTRAINT `fk_employeeID`
     FOREIGN KEY (`fk_employeeID`)
-    REFERENCES `employee`.`employee` (`id`)
+    REFERENCES `employee` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
@@ -143,15 +143,15 @@ INNER JOIN employee emp ON emp.id = es.fk_employee_id ;
 
 -- Creating select query of employee name, total salary, hobby name
 
-SELECT emp.id,concat(emp.first_name," ", emp.last_name) name, 
+SELECT emp.id, concat(emp.first_name," ", emp.last_name) name, 
 es.SUM(salary) paid,
 (
 SELECT group_concat(hb.name)
 FROM employee_hobby eh
 INNER JOIN hobby hb ON hb.id = eh.fk_hobby_id
 WHERE emp.id = eh.fk_employee_id
-)
+) hobby_name
 FROM employee_salary es
-INNER JOIN employee emp ON emp.id= es.fk_employee_id
+INNER JOIN employee emp ON emp.id = es.fk_employee_id
 GROUP BY emp.id;
 
